@@ -4,6 +4,7 @@
 import sys
 import getopt
 import logging
+import parser
 
 def process(argv):
 	# get variable from options.
@@ -11,27 +12,9 @@ def process(argv):
 	if para_set is None:
 		sys.exit(1)
 
-	# get source list.
-	for o, a in opts:
-		if o == '-i':
-			pass
-		elif o == '-o':
-			pass
-		elif o == '--testing':
-			pass
-		elif o == '--compress':
-			pass
-		elif o == '--merge':
-			pass
-		else:
-			logging.error("unhandled option.")
-			sys.exit(1)
+	# select module.
+	select_module(para_set)
 
-	# filter data.
-
-	# save data.
-
-	pass
 
 def get_option(argv):
 	## -i: input file path, -o: output file path, --compress: , --merge, --testing
@@ -49,6 +32,34 @@ def get_option(argv):
 		return None
 
 	return opts
+
+def select_module(para_set):
+	# get parameters.
+	input_file = '';
+	output_path = '';
+	testing = False;
+	compress = '';
+	merge = False;
+
+	for o, a in para_set:
+		if o == '-i':
+			input_file = a
+		elif o == '-o':
+			output_path = a
+		elif o == '--testing':
+			testing = True
+		elif o == '--compress':
+			compress = a
+		elif o == '--merge':
+			merge = True
+		else:
+			logging.error("unhandled option.")
+			sys.exit(1)
+
+	if testing:
+		pass
+	else:
+		parser.parser(input_file, output_path, merge, compress)
 
 if __name__ == "__main__":
 	reload(sys)
