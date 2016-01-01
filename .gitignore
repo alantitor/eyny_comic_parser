@@ -1,0 +1,9 @@
+# Specific file #
+src/config.py
+test.txt
+
+# temp file #
+*~
+
+# Compiled source #
+*.pyc
