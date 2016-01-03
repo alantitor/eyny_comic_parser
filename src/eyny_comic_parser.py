@@ -13,22 +13,23 @@ def process(argv):
 		sys.exit(1)
 
 	# select module.
-	select_module(para_set)
-
+	state = select_module(para_set)
+	if state is False:
+		sys.exit(1)
 
 def get_option(argv):
 	## -i: input file path, -o: output file path, --compress: , --merge, --testing
 	opts = None
 	args = None
-	
+
 	try:
 		opts, args = getopt.getopt(argv[1:], 'i:o:h', ['testing', 'merge', 'compress='])
 	except getopt.GetoptError as err:
 		logging.error(err)
 		return None
-			
+
 	if len(args) > 0:
-		logging.error("option sets not correct.")
+		#logging.error("option sets not correct.")
 		return None
 
 	return opts
@@ -53,13 +54,18 @@ def select_module(para_set):
 		elif o == '--merge':
 			merge = True
 		else:
-			logging.error("unhandled option.")
-			sys.exit(1)
+			#logging.error("unhandled option.")
+			return False
 
 	if testing:
 		pass
 	else:
-		parser.parser(input_file, output_path, merge, compress)
+		state = parser.parser(input_file, output_path, merge, compress)
+		if state is False:
+			#logging.error("can't not parse file.")
+			return False
+
+	return True
 
 if __name__ == "__main__":
 	reload(sys)
