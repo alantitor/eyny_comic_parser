@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import os
 import getopt
 import logging
 import parser
@@ -23,7 +24,7 @@ def get_option(argv):
 	args = None
 
 	try:
-		opts, args = getopt.getopt(argv[1:], 'i:o:h', ['testing', 'merge', 'compress='])
+		opts, args = getopt.getopt(argv[1:], 'f:p:o:h', ['testing', 'merge', 'compress='])
 	except getopt.GetoptError as err:
 		logging.error(err)
 		return None
@@ -36,14 +37,17 @@ def get_option(argv):
 
 def select_module(para_set):
 	# get parameters.
+	input_path = '';
 	input_file = '';
-	output_path = '';
+	output_path = './';
 	testing = False;
 	compress = '';
 	merge = False;
 
 	for o, a in para_set:
-		if o == '-i':
+		if o == '-p':
+			input_path = a
+		elif o == '-f':
 			input_file = a
 		elif o == '-o':
 			output_path = a
@@ -57,13 +61,30 @@ def select_module(para_set):
 			#logging.error("unhandled option.")
 			return False
 
+	# check parameters state
+	# only allow user use -p or -f at same time.
+	if (bool(len(input_path)) != bool(len(input_file))) is False:
+		return False
+
 	if testing:
-		pass
+		# go to test module.
+		return True
+
+	if len(input_path) > 0:
+		# parse all html files in folder.
+		for file in os.listdir(input_path):
+			if os.path.isfile(input_path + '/' + file):
+				state = parser.parser(input_path + '/' + file, output_path, merge, compress)
+				if state is False:
+					continue
+				else:
+					print '[ok]' + file
 	else:
+		# parse html file.
 		state = parser.parser(input_file, output_path, merge, compress)
 		if state is False:
-			#logging.error("can't not parse file.")
 			return False
+		print '[ok]' + input_file
 
 	return True
 
