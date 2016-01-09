@@ -12,8 +12,8 @@ import shutil
 
 def parser(input_file, output_path, merge, compress_type):
 	#logging.basicConfig(level=logging.INFO)
-	root = logging.getLogger()
-	root.setLevel(logging.INFO)
+	#root = logging.getLogger()
+	#root.setLevel(logging.INFO)
 
 	# get file information
 	f_name, f_extension = os.path.splitext(input_file)
@@ -21,6 +21,10 @@ def parser(input_file, output_path, merge, compress_type):
 	f_name = os.path.basename(f_name)
 	image_title = tool.fetch_title(tool.string_encode(f_name))
 
+	# a html file must map to a source folder.
+	if not os.path.isdir(f_path + '/'+ f_name + '_files'):
+		return False
+	
 	# find image list
 	image_list = find_image_list(input_file)
 	if image_list is None:
