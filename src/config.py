@@ -9,3 +9,4 @@ IMAGE_HEIGH = 1000
 GARBAGE_TITLE_STRING1 = ''
 GARBAGE_TITLE_STRING2 = ''
 GARBAGE_IMAGE_LIST = ['avatar', 'middle', 'small', '_', '-']
+IMAGE_MIN_LENGTH = (2 + 4) # file name + file extension
