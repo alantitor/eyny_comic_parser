@@ -91,6 +91,6 @@ def image_rule2(item):
 	return True
 
 def image_rule3(item):
-	if len(os.path.basename(item)) < (2 + 4): # file name + file extension.
+	if len(os.path.basename(item)) < config.IMAGE_MIN_LENGTH: # file name + file extension.
 		return False
 	return True
