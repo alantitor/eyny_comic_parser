@@ -43,24 +43,30 @@ def detect_image(image_list):
 		pass
 	else:
 		# is list
-		for index, item in enumerate(image_list):
-			try:
-				item = string_decode(item)
-				im = Image.open(item)
-			except:
-				#logging.warning("can't detect image information")
-				continue
-
-			if image_rule1(im.size[0], im.size[1]) is False:
+		#for index, item in enumerate(image_list):
+		for item in image_list:
+			if image_rule1(item) is False:
 				continue
 			if image_rule2(item) is False:
+			 	continue
+			if image_rule3(item) is False:
 				continue
 
 			result_list.append(item)
 
 	return result_list
 
-def image_rule1(width, heigh):
+def image_rule1(item):
+	try:
+		item = string_decode(item)
+		im = Image.open(item)
+	except:
+		#logging.warning("can't detect image information")
+		return False
+
+	width = im.size[0]
+	heigh = im.size[1]
+
 	# avatar image
 	if heigh < 400 and width < 400:
 		return False
@@ -82,4 +88,9 @@ def image_rule2(item):
 	for a in config.GARBAGE_IMAGE_LIST:
 		if a in os.path.basename(item):
 			return False
+	return True
+
+def image_rule3(item):
+	if len(os.path.basename(item)) < (2 + 4): # file name + file extension.
+		return False
 	return True
